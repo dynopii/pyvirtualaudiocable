@@ -58,3 +58,12 @@ Progress:
             Now, [required for first time setup only]
                 Open pavucontrol, and change the playback device for the running "ALSA plug-in[aplay]: ALSA Playback on" and select dynopii in the option present.
                 Now, in your app, (I tested on google meet), select "Monitor of Dynopii" (if not already selected, and voila!)
+
+
+Well so I haven't solved it completely.
+
+Anyways, useful links I'll need if I work on it ahead
+
+https://stackoverflow.com/questions/36982716/pipe-from-python-to-aplay
+https://stackoverflow.com/questions/28847329/python-piping-between-arecord-and-aplay    !!(exactly what I want to accomplish, sadly no answers there :/)
+https://github.com/voice-engine/make-a-smart-speaker/issues/5 (I thought I had everything when I found this, but the python code doesn't work :/)
