@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Pass input directly to output.
-
 https://app.assembla.com/spaces/portaudio/git/source/master/test/patest_wire.c
-
 """
 import argparse
 

@@ -38,3 +38,23 @@ Progress:
             >$ pactl unload-module <module-number>
             This module number can be found using the command 
                 >$ pactl list short modules
+            Or, in one command : 
+            >$ pactl list short modules | grep "sink_name=dynopii" | cut -f1 | xargs -L1 pactl unload-module (tested, works perfect, even removes multiple sinks)
+
+    Jan 3, 0100 hours
+        I noticed that after running the pacmd load-module command, the sounddevice thing does not work correctly.
+
+
+    Jan 4, 2349 hours 
+        I think I just solved it. Dammmmmmmmmnnnnnnnnnnn
+
+        Okay so I need to run the following commands:
+            First, run
+            $> arecord -f cd - | aplay -
+            then, 
+            run the command 
+            $> pacmd load-module module-null-sink sink_name=dynopii_sink sink_properties=device.description=dynopii
+
+            Now, [required for first time setup only]
+                Open pavucontrol, and change the playback device for the running "ALSA plug-in[aplay]: ALSA Playback on" and select dynopii in the option present.
+                Now, in your app, (I tested on google meet), select "Monitor of Dynopii" (if not already selected, and voila!)
