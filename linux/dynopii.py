@@ -13,7 +13,6 @@ try:
     p0 = subprocess.Popen(cmd0, stdout=subprocess.PIPE) 
 
     '''
-    !Important
     This stdout of p0 is basically the data we get from arecord, and the data that we can manipulate on the fly and then
     feed to the stdin of the next process p1. 
     If you will work on this, you'll have to replace the stdin=p0.stdout of the following process p1 with your manipulated data.
