@@ -2,23 +2,30 @@ import subprocess
 import audioop
 
 try:    
-        chmods0 = ['chmod', '755', 'dynopii.sh']
-        chmods1 = ['chmod', '755', 'close.sh']
-        subprocess.Popen(chmods0)
-        subprocess.Popen(chmods1)
-        
-        cmd0 = ['./dynopii.sh']
-        p0 = subprocess.Popen(cmd0)
-        cmd = ['arecord', '-f', 'cd', '-']
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        cmd2 = ['aplay', '-f', 'cd', '-']
-        p2 = subprocess.Popen(cmd2, stdin=process.stdout)
-        print('#' * 80)
-        print()
-        print('To quit this program and close your virtual device, press Ctrl-C')
-        print()
-        print('#' * 80)
-        input()
+
+    print('#' * 80)
+    print('Initiating dynopii virtual audio cable ... ')
+    loadcmd = ['pacmd', 'load-module', 'module-null-sink', 'sink_name=dynopii_sink', 'sink_properties=device.description=dynopii']
+    subprocess.Popen(loadcmd)
+    subprocess.Popen('pavucontrol')
+    
+    cmd0 = ['arecord', '-f', 'cd', '-']
+    p0 = subprocess.Popen(cmd0, stdout=subprocess.PIPE) 
+
+    '''
+    !Important
+    This stdout of p0 is basically the data we get from arecord, and the data that we can manipulate on the fly and then
+    feed to the stdin of the next process p1. 
+    If you will work on this, you'll have to replace the stdin=p0.stdout of the following process p1 with your manipulated data.
+    '''
+
+    cmd1 = ['aplay', '-f', 'cd', '-']
+    p1 = subprocess.Popen(cmd1, stdin=p0.stdout)
+    print('')
+    print('To quit this program and close your virtual device, press Ctrl-C')
+    print('')
+    print('#' * 80)
+    input()
 
 except EOFError:
     print('EOF Error')
@@ -39,5 +46,5 @@ except KeyboardInterrupt:
     unp2 = subprocess.Popen(uncmd2, stdin=unp1.stdout, stdout=subprocess.PIPE)
     unp3 = subprocess.Popen(uncmd3, stdin=unp2.stdout)
 
-    killcmd = ['pkill', 'arecord']  #kill the arecord (hence killing ALSA playback)
+    killcmd = ['pkill', 'arecord']  #kill arecord (hence killing ALSA playback since aplay simultaneously stops receiving input via the pipe)
     closefin = subprocess.Popen(killcmd)
