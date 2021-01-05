@@ -24,7 +24,20 @@ except EOFError:
     print('EOF Error')
 
 except KeyboardInterrupt:
+    print()
     print('Closing the virtual audio cable ....')
     print('Unloading null-sinks ...')
     print('Stopping playback ...')
-    subprocess.Popen('./close.sh')
+
+    uncmd0 = ['pactl', 'list', 'short', 'modules']
+    uncmd1 = ['grep', 'sink_name=dynopii']
+    uncmd2 = [ 'cut', '-f1' ]
+    uncmd3 = [ 'xargs', '-L1', 'pactl', 'unload-module' ]
+
+    unp0 = subprocess.Popen(uncmd0, stdout=subprocess.PIPE)
+    unp1 = subprocess.Popen(uncmd1, stdin=unp0.stdout, stdout=subprocess.PIPE)
+    unp2 = subprocess.Popen(uncmd2, stdin=unp1.stdout, stdout=subprocess.PIPE)
+    unp3 = subprocess.Popen(uncmd3, stdin=unp2.stdout)
+
+    killcmd = ['pkill', 'arecord']  #kill the arecord (hence killing ALSA playback)
+    closefin = subprocess.Popen(killcmd)
